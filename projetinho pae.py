@@ -19,20 +19,24 @@ speed_y_shoot = 20
 shoot = []
 score = 0
 
+# Configuração do tempo limite
+TEMPO_LIMITE = 2000  # 2 segundos
+EVENTO_PARAR_SOM = pygame.USEREVENT + 1  # Criar evento personalizado para parar o som
+
 # Posições iniciais do jogador
 player_x = 230
 player_y = 700
 speed_player = 10
 
 # Carregamento de imagens e sons
-potatoImg_Player = pygame.image.load("D:/progaming/Pygame/Baked_Potato_JE4_BE2.webp")
-BackImg = pygame.image.load("D:/progaming/Pygame/quadrodecorativoretangularplanetaterraspaceazul.webp")
-enimyPotatoImg = pygame.image.load("D:/progaming/Pygame/Poisonous_Potato_JE3_BE2.webp")
-shootImg = pygame.image.load("D:/progaming/Pygame/pngtree-golden-yellow-fast-food-potato-fries-png-image_2707911.jpg")
-shootImg = pygame.transform.scale(shootImg, (30, 30))
+potatoImg_Player = pygame.image.load("D:/progaming/space-potato-wars/Baked_Potato_JE4_BE2.webp")
+BackImg = pygame.image.load("D:/progaming/space-potato-wars/quadrodecorativoretangularplanetaterraspaceazul.webp")
+enimyPotatoImg = pygame.image.load("D:/progaming/space-potato-wars/Poisonous_Potato_JE3_BE2.webp")
+shootImg = pygame.image.load("D:/progaming/space-potato-wars/pngtree-golden-yellow-fast-food-potato-fries-png-image_2707911.jpg")
+shootImg = pygame.transform.scale(shootImg, (60, 60))
 
-sondOfShoot = pygame.mixer.Sound("D:/progaming/Pygame/sound-effects-single-gun-shot-247124.mp3")
-background_music = pygame.mixer.Sound("D:\progaming\Pygame\pad-space-travel-hyperdrive-engine-humming-235901.mp3")
+sondOfShoot = pygame.mixer.Sound("D:/progaming/space-potato-wars/depositphotos_430790386-track-sound-food-sizzle-oil-french.mp3")
+background_music = pygame.mixer.Sound("D:/progaming/space-potato-wars/pad-space-travel-hyperdrive-engine-humming-235901.mp3")
 
 # Iniciar música de fundo (repetindo infinitamente)
 background_music.play(-1)
@@ -45,9 +49,15 @@ running = True
 while running:
     screen.blit(BackImg, (0, 0))  # Atualiza o fundo
 
+    # Captura eventos
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        # Parar o som após 2 segundos
+        elif event.type == EVENTO_PARAR_SOM:
+            sondOfShoot.stop()
+            pygame.time.set_timer(EVENTO_PARAR_SOM, 0)  # Cancela o timer para evitar repetições
 
     # Movimentação do jogador
     keys = pygame.key.get_pressed()
@@ -70,6 +80,7 @@ while running:
     if keys[pygame.K_SPACE] and not shot_Scoop:
         shot_Scoop = True
         sondOfShoot.play()
+        pygame.time.set_timer(EVENTO_PARAR_SOM, TEMPO_LIMITE)  # Iniciar timer para parar o som
         shoot.append([player_x + 20, player_y])
 
     # Atualizar posição dos tiros
@@ -92,11 +103,6 @@ while running:
     clock.tick(60)
 
 pygame.quit()
-
-
-
-
-
 
     
 
